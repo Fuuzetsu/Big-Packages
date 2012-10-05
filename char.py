@@ -4,7 +4,7 @@ import messenger
 import button
 import config
 import text
-from main import load_join_i
+from utility import load_join_i
 
 # Non-divided sprite_sheet
 SPRITE_SHEET_MERGED = load_join_i(["resources", "art", "sprite_sheet.png"]) 

@@ -3,14 +3,17 @@ import screen
 import button
 import config
 import messenger
-from main import load_join_i, list_pj
+from utility import load_join_i
+
+import os.path
+load_join_i = lambda l: pyglet.image.load(reduce(os.path.join, l)) 
 
 IMAGES = dict(zip(["title_screen", "start_button", 
                    "quit_button", "char_button"],
-                  map(load_join_i, [["resources", "art", "title_screen.png",
-                                     "resources", "art", "start_button.png",
-                                     "resources", "art", "quit_button.png",
-                                     "resources", "art", "char_button.png"]])))
+                  map(load_join_i, [["resources", "art", "title_screen.png"],
+                                    ["resources", "art", "start_button.png"],
+                                    ["resources", "art", "quit_button.png"],
+                                    ["resources", "art", "char_button.png"]])))
 
 class MenuScreen(screen.AbstractScreen):
     def __init__(self):
@@ -25,7 +28,7 @@ class MenuScreen(screen.AbstractScreen):
         self.quit_button.draw()
 
     def make_buttons(self):
-        messenger.Messenger = msngr
+        msngr = messenger.Messenger
         self.start_button = button.Button(image = IMAGES["start_button"],
                                           x = config.SCREEN_WIDTH / 2,
                                           y = config.SCREEN_HEIGHT / 2)

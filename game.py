@@ -3,7 +3,7 @@ import config
 import messenger
 import random
 import screen
-from main import list_pj, load_join_m, load_join_i
+from utility import list_pj, load_join_m, load_join_i
 from pyglet.gl import * #Neccesary to prevent linear scaling
 
 #Non-divided sprite_sheet
@@ -190,7 +190,7 @@ class Collide(object):
 class Interpolate(object):
     """Adds methods for tweening."""
     def interpolate(self, number, steps, form):
-        "Allows for various forms of interpolation."
+        """Allows for various forms of interpolation."""
         if form == "step":
             return [number / steps for i in range(steps)]
         elif form == "accelerate":
