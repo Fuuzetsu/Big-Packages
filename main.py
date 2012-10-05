@@ -25,13 +25,17 @@ def resourceInit():
             print "Error: avbin.dll not found."
             quit()
         elif sys.platform.startswith("linux"):
+            path32 = list_pj(["avbin-linux-x86-32-7", "install.sh"])
+            path64 = list_pj(["avbin-linux-x86-64-7", "install.sh"])
             if sys.maxsize > 2 ** 32:
-                if os.system(list_pj(["avbin-linux-x86-64-7", "install.sh"])) != 0:
-                    print "You must install avbin manually by running the install.sh script in avbin-linux-x86-64-7."
+                if os.system(path32) != 0:
+                    print "You must install avbin manually by running" + \
+                    " the install.sh script in avbin-linux-x86-64-7."
                     quit()
             else:
-                if os.system(list_pj(["avbin-linux-x86-32-7", "install.sh"])) != 0:
-                    print "You must install avbin manually by running the install.sh script in avbin-linux-x86-64-7."
+                if os.system(path64) != 0:
+                    print "You must install avbin manually by running" + \
+                    " the install.sh script in avbin-linux-x86-64-7."
                     quit()
         elif sys.platform == "darwin":
             raise "Error: This game is not supported on OSX."
@@ -47,11 +51,11 @@ class Game(pyglet.window.Window):
             "WeWishYou"       : ["resources", "music", "We Wish You.mp3"],
             "Grinch1"         : ["resources", "music", "grinch.mp3"]
             # Grinch2 refuses to load, comment out for now
-            #"Grinch2"         : ["resources", "music", "02-Grinch.mp3)"]))
+            # "Grinch2"         : ["resources", "music", "02-Grinch.mp3)"]
             }
         
         for k, v in self.MUSIC.iteritems(): 
-            self.MUSIC[k] = load_join_m(v)
+            self.MUSIC[k] = pyglet.media.load(list_pj(v))
 
         messenger.Messenger.game = self
         self.create_music_player()
