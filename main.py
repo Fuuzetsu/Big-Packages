@@ -1,6 +1,15 @@
 import pyglet
 import sys
 import os
+import config
+import messenger
+import menu
+import game
+import credit
+import char
+import random
+import os.path
+
 try: #This will install avbin if needed, and it works on windows and linux!
     pyglet.resource.image(r"resources/art/background1.png")
 except:
@@ -13,10 +22,10 @@ except:
                 print "You must install avbin manually by running the install.sh script in avbin-linux-x86-64-7."
                 quit()
         else:
-            if os.system("avbin-linux-x86-32-7/install.sh") !=0:
+            if os.system("avbin-linux-x86-32-7/install.sh") != 0:
                 print "You must install avbin manually by running the install.sh script in avbin-linux-x86-64-7."
                 quit()
-    elif sys.platform == "dawrwin":
+    elif sys.platform == "darwin":
         #Note, osx doesn't work because the avbin devs don't care about it
         #and left it in the dust. Just a small town OS living in a
         #dangerious dog eat world. Lost it all at the gambling games.
@@ -25,13 +34,6 @@ except:
         #You gotta work. Work. Work this out. Get ahead. Ah yeah!
         raise "Error: This game is not supported on OSX."
         os.system("avbin-darwin-universal-5/install.sh")
-import config
-import messenger
-import menu
-import game
-import credit
-import char
-import random
 
 
 MUSIC = {"JingleBellsA" : pyglet.media.load(r"resources\music\Jingle Bells.mp3"),
@@ -62,6 +64,7 @@ class Game(pyglet.window.Window):
         self.mode = self.mode_hash["MenuScreen"]
         #self.mode = self.mode_hash["GameScreen"]
         #TESTING PURPOSES
+
     def create_music_player(self):
         "Creates a music player and loads all the fun christmas music on it."
         self.music_player = pyglet.media.Player()
@@ -74,27 +77,37 @@ class Game(pyglet.window.Window):
         for song in music_list:
             self.music_player.queue(song)
         self.music_player.play()
-        pyglet.clock.schedule_interval(lambda dt : self.music_player.play(), 2.0)
+        pyglet.clock.schedule_interval(self.music_player.play, 2.0)
+
     def on_draw(self):
         self.clear()
         self.mode.on_draw()
         #self.fps_display.draw() #FPS should not be displayed during normal gameplay
+
     def on_key_press(self, symbol, modifiers):
         self.mode.on_key_press(symbol, modifiers)
+
     def on_key_release(self, symbol, modifiers):
         self.mode.on_key_release(symbol, modifiers)
+
     def on_mouse_motion(self, x, y, dx, dy):
         self.mode.on_mouse_motion(x, y, dx, dy)
+
     def on_mouse_press(self, x, y, button, modifiers):
         self.mode.on_mouse_press(x, y, button, modifiers)
+
     def on_mouse_release(self, x, y, button, modifiers):
         self.mode.on_mouse_release(x, y, button, modifiers)
+
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
         self.mode.on_mouse_drag(x, y, dx, dy, buttons, modifiers)
+
     def on_close(self):
         self.music_player.pause()
         self.music_player = None
         super(Game, self).on_close()
+
+
 if __name__ == "__main__":
     root = Game(config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
     pyglet.app.run()
