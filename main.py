@@ -33,20 +33,18 @@ def resourceInit():
             raise "Error: This game is not supported on OSX."
 
 
-
-MUSIC = {"JingleBellsA" : pyglet.media.load(list_pj(["resources", "music", "Jingle Bells.mp3"])),
-         "JingleBellsB" : pyglet.media.load(list_pj(["resources", "music", "Jingle Bells 3.mp3"])),
-         "OhChristmasTree" : pyglet.media.load(list_pj(["resources", "music", "Oh Xmas.mp3"])),
-         "UpOnAHouseTop" : pyglet.media.load(list_pj(["resources", "music", "Up on a Housetop.mp3"])),
-         "WeWishYou" : pyglet.media.load(list_pj(["resources", "music", "We Wish You.mp3"])),
-         "Grinch1" : pyglet.media.load(list_pj(["resources", "music", "grinch.mp3"])),
-         # Grinch2 refuses to load, temporarily replace with grinch.mp3
-         "Grinch2" : pyglet.media.load(list_pj(["resources", "music", "grinch.mp3)"]))
-         #"Grinch2" : pyglet.media.load(list_pj(["resources", "music", "02-Grinch.mp3)"]))
-         }
-
 class Game(pyglet.window.Window):
     def __init__(self, width, height):
+        self.MUSIC = {"JingleBellsA" : pyglet.media.load(list_pj(["resources", "music", "Jingle Bells.mp3"])),
+                      "JingleBellsB" : pyglet.media.load(list_pj(["resources", "music", "Jingle Bells 3.mp3"])),
+                      "OhChristmasTree" : pyglet.media.load(list_pj(["resources", "music", "Oh Xmas.mp3"])),
+                      "UpOnAHouseTop" : pyglet.media.load(list_pj(["resources", "music", "Up on a Housetop.mp3"])),
+                      "WeWishYou" : pyglet.media.load(list_pj(["resources", "music", "We Wish You.mp3"])),
+                      "Grinch1" : pyglet.media.load(list_pj(["resources", "music", "grinch.mp3"])),
+                      # Grinch2 refuses to load, temporarily replace with grinch.mp3
+                      "Grinch2" : pyglet.media.load(list_pj(["resources", "music", "grinch.mp3)"]))
+                      #"Grinch2" : pyglet.media.load(list_pj(["resources", "music", "02-Grinch.mp3)"]))
+                      }
         messenger.Messenger.game = self
         self.create_music_player()
         self.fps_display = pyglet.clock.ClockDisplay()
@@ -70,8 +68,8 @@ class Game(pyglet.window.Window):
         self.music_player = pyglet.media.Player()
         #self.music_player.eos_action = "loop" #disabling looping
         music_list = []
-        for key in MUSIC:
-            item = MUSIC[key]
+        for key in self.MUSIC:
+            item = self.MUSIC[key]
             music_list.append(item)
         random.shuffle(music_list)
         for song in music_list:
