@@ -13,30 +13,25 @@ import os.path
 # Joins a list of paths into a single path (OS independent)
 list_pj = lambda l: reduce(os.path.join, l) 
 
-try: #This will install avbin if needed, and it works on windows and linux!
-    pyglet.resource.image(list_pj(["resources", "art", "background1.png"]))
-except:
-    if sys.platform.startswith("win"):
-        print "Error: avbin.dll not found."
-        quit()
-    elif sys.platform.startswith("linux"):
-        if sys.maxsize > 2 ** 32:
-            if os.system(list_pj(["avbin-linux-x86-64-7", "install.sh"])) != 0:
-                print "You must install avbin manually by running the install.sh script in avbin-linux-x86-64-7."
-                quit()
-        else:
-            if os.system(list_pj(["avbin-linux-x86-32-7", "install.sh"])) != 0:
-                print "You must install avbin manually by running the install.sh script in avbin-linux-x86-64-7."
-                quit()
-    elif sys.platform == "darwin":
-        #Note, osx doesn't work because the avbin devs don't care about it
-        #and left it in the dust. Just a small town OS living in a
-        #dangerious dog eat world. Lost it all at the gambling games.
-        #Working hard to fight the man. Didn't even really have a plan.
-        #But hey, man? You gotta work. Work. Work this out. Get ahead.
-        #You gotta work. Work. Work this out. Get ahead. Ah yeah!
-        raise "Error: This game is not supported on OSX."
-        os.system(list_pj(["avbin-darwin-universal-5", "install.sh"]))
+def resourceInit():
+    try: #This will install avbin if needed, and it works on windows and linux!
+        pyglet.resource.image(list_pj(["resources", "art", "background1.png"]))
+    except:
+        if sys.platform.startswith("win"):
+            print "Error: avbin.dll not found."
+            quit()
+        elif sys.platform.startswith("linux"):
+            if sys.maxsize > 2 ** 32:
+                if os.system(list_pj(["avbin-linux-x86-64-7", "install.sh"])) != 0:
+                    print "You must install avbin manually by running the install.sh script in avbin-linux-x86-64-7."
+                    quit()
+            else:
+                if os.system(list_pj(["avbin-linux-x86-32-7", "install.sh"])) != 0:
+                    print "You must install avbin manually by running the install.sh script in avbin-linux-x86-64-7."
+                    quit()
+        elif sys.platform == "darwin":
+            raise "Error: This game is not supported on OSX."
+
 
 
 MUSIC = {"JingleBellsA" : pyglet.media.load(list_pj(["resources", "music", "Jingle Bells.mp3"])),
@@ -45,7 +40,9 @@ MUSIC = {"JingleBellsA" : pyglet.media.load(list_pj(["resources", "music", "Jing
          "UpOnAHouseTop" : pyglet.media.load(list_pj(["resources", "music", "Up on a Housetop.mp3"])),
          "WeWishYou" : pyglet.media.load(list_pj(["resources", "music", "We Wish You.mp3"])),
          "Grinch1" : pyglet.media.load(list_pj(["resources", "music", "grinch.mp3"])),
-         "Grinch2" : pyglet.media.load(list_pj(["resources", "music", "02-Grinch.mp3)"]))
+         # Grinch2 refuses to load, temporarily replace with grinch.mp3
+         "Grinch2" : pyglet.media.load(list_pj(["resources", "music", "grinch.mp3)"]))
+         #"Grinch2" : pyglet.media.load(list_pj(["resources", "music", "02-Grinch.mp3)"]))
          }
 
 class Game(pyglet.window.Window):
