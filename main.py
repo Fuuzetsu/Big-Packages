@@ -14,18 +14,18 @@ import os.path
 list_pj = lambda l: reduce(os.path.join, l) 
 
 try: #This will install avbin if needed, and it works on windows and linux!
-    pyglet.resource.image(list_pj(["resources", "art", "background1.png"])
+    pyglet.resource.image(list_pj(["resources", "art", "background1.png"]))
 except:
     if sys.platform.startswith("win"):
         print "Error: avbin.dll not found."
         quit()
     elif sys.platform.startswith("linux"):
         if sys.maxsize > 2 ** 32:
-            if os.system(list_pj(["avbin-linux-x86-64-7", "install.sh"]) != 0:
+            if os.system(list_pj(["avbin-linux-x86-64-7", "install.sh"])) != 0:
                 print "You must install avbin manually by running the install.sh script in avbin-linux-x86-64-7."
                 quit()
         else:
-            if os.system(list_pj(["avbin-linux-x86-32-7", "install.sh"]) != 0:
+            if os.system(list_pj(["avbin-linux-x86-32-7", "install.sh"])) != 0:
                 print "You must install avbin manually by running the install.sh script in avbin-linux-x86-64-7."
                 quit()
     elif sys.platform == "darwin":
@@ -39,14 +39,14 @@ except:
         os.system(list_pj(["avbin-darwin-universal-5", "install.sh"]))
 
 
-MUSIC = {"JingleBellsA" : pyglet.media.load(list_pj(["resources", "music", "Jingle Bells.mp3")]),
-         "JingleBellsB" : pyglet.media.load(list_pj(["resources", "music", "Jingle Bells 3.mp3")]),
-         "OhChristmasTree" : pyglet.media.load(list_pj(["resources", "music", "Oh Xmas.mp3")]),
-         "UpOnAHouseTop" : pyglet.media.load(list_pj(["resources", "music", "Up on a Housetop.mp3")]),
-         "WeWishYou" : pyglet.media.load(list_pj(["resources", "music", "We Wish You.mp3")]),
-         "Grinch1" : pyglet.media.load(list_pj(["resources", "music", "grinch.mp3")]),
-         "Grinch2" : pyglet.media.load(list_pj(["resources", "music", "02-Grinch.mp3")])
-      
+MUSIC = {"JingleBellsA" : pyglet.media.load(list_pj(["resources", "music", "Jingle Bells.mp3"])),
+         "JingleBellsB" : pyglet.media.load(list_pj(["resources", "music", "Jingle Bells 3.mp3"])),
+         "OhChristmasTree" : pyglet.media.load(list_pj(["resources", "music", "Oh Xmas.mp3"])),
+         "UpOnAHouseTop" : pyglet.media.load(list_pj(["resources", "music", "Up on a Housetop.mp3"])),
+         "WeWishYou" : pyglet.media.load(list_pj(["resources", "music", "We Wish You.mp3"])),
+         "Grinch1" : pyglet.media.load(list_pj(["resources", "music", "grinch.mp3"])),
+         "Grinch2" : pyglet.media.load(list_pj(["resources", "music", "02-Grinch.mp3)"]))
+         }
 
 class Game(pyglet.window.Window):
     def __init__(self, width, height):
