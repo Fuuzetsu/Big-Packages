@@ -14,8 +14,8 @@ import os.path
 list_pj = lambda l: reduce(os.path.join, l) 
 
 # Composition of join and load
-load_join_i = lambda l: pyglet.image.load(list_pj(l))
-load_join_m = lambda l: pyglet.media.load(list_pj(l))
+load_join_i = lambda l: pyglet.image.load(reduce(os.path.join(l)))
+load_join_m = lambda l: pyglet.media.load(reduce(os.path.join(l)))
 
 def resourceInit():
     try: #This will install avbin if needed, and it works on windows and linux!
