@@ -4,13 +4,17 @@ import messenger
 import button
 import config
 import text
+from main import load_join_i
 
-SPRITE_SHEET_MERGED = pyglet.image.load(r"resources/art/sprite_sheet.png") #Non-divided sprite_sheet
-SPRITE_SHEET_DIVIDED = pyglet.image.ImageGrid(SPRITE_SHEET_MERGED, 8, 8) #Divided sprite_sheet
+# Non-divided sprite_sheet
+SPRITE_SHEET_MERGED = load_join_i(["resources", "art", "sprite_sheet.png"]) 
+
+# Divided sprite_sheet
+SPRITE_SHEET_DIVIDED = pyglet.image.ImageGrid(SPRITE_SHEET_MERGED, 8, 8) 
 
 IMAGES = {}
-IMAGES["background"] = pyglet.image.load(r"resources/art/background1.png")
-IMAGES["menu_button"] = pyglet.image.load(r"resources/art/menu_button.png")
+IMAGES["background"] = load_join_i(["resources", "art", "background1.png"])
+IMAGES["menu_button"] = load_join_i(["resources", "art", "menu_button.png"])
 IMAGES["tiber"] = SPRITE_SHEET_DIVIDED[63]
 IMAGES["gwen"] = SPRITE_SHEET_DIVIDED[62]
 

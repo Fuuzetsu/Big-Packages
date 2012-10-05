@@ -1,4 +1,5 @@
-"A file for storing configuration text. It's easier than parsing a text file."
+"""A file for storing configuration text. 
+It's easier than parsing a text file."""
 FONT_TYPE = "Arial"
 
 SCREEN_WIDTH = 800

@@ -1,10 +1,7 @@
 import pyglet
-import config
-
-IMAGES = {}
 
 class Button(pyglet.sprite.Sprite):
-    "A sprite that reacts when clicked."
+    """A sprite that reacts when clicked."""
     def __init__(self, image, x, y, text = None):
         super(Button, self).__init__(image)
         #The following text part needs work.
