@@ -3,9 +3,10 @@ import config
 import messenger
 import random
 import screen
+from main import list_pj
 from pyglet.gl import * #Neccesary to prevent linear scaling
 
-SPRITE_SHEET_MERGED = pyglet.image.load(r"resources/art/sprite_sheet.png") #Non-divided sprite_sheet
+SPRITE_SHEET_MERGED = pyglet.image.load(list_pj(["resources", "art", "sprite_sheet.png"])) #Non-divided sprite_sheet
 SPRITE_SHEET_DIVIDED = pyglet.image.ImageGrid(SPRITE_SHEET_MERGED, 8, 8) #Divided sprite_sheet
 IMAGES = {} #A hash of all the images in the game with the appropriate names
 PLAYER_IMAGES = [SPRITE_SHEET_DIVIDED[63],
@@ -15,13 +16,13 @@ PRESENT_IMAGES = [SPRITE_SHEET_DIVIDED[56],
                   SPRITE_SHEET_DIVIDED[58]]
 
 SOUNDS = {}
-SOUNDS["beep"] = pyglet.media.load(r"resources/music/bell-ring-01.mp3", streaming = False)
-SOUNDS["end"] = pyglet.media.load(r"resources/music/bell-ringing-01.mp3", streaming = False)
-SOUNDS["crumple"] = pyglet.media.load(r"resources/music/paper-rustle-8.mp3", streaming = False)
-BACKGROUND_IMAGES = [pyglet.image.load(r"resources/art/background1.png"),
-                     pyglet.image.load(r"resources/art/background2.png"),
-                     pyglet.image.load(r"resources/art/background3.png"),
-                     pyglet.image.load(r"resources/art/background4.png")]
+SOUNDS["beep"] = pyglet.media.load(list_pj(["resources", "music", "bell-ring-01.mp3"]), streaming = False)
+SOUNDS["end"] = pyglet.media.load(list_pj(["resources", "music", "bell-ringing-01.mp3"]), streaming = False)
+SOUNDS["crumple"] = pyglet.media.load(list_pj(["resources", "music", "paper-rustle-8.mp3"]), streaming = False)
+BACKGROUND_IMAGES = [pyglet.image.load(list_pj(["resources", "art", "background1.png"])),
+                     pyglet.image.load(list_pj(["resources", "art", "background2.png"])),
+                     pyglet.image.load(list_pj(["resources", "art", "background3.png"])),
+                     pyglet.image.load(list_pj(["resources", "art", "background4.png"]))]
 
 class GameScreen(screen.AbstractScreen):
     "Screen describing the actual game part of the game."
