@@ -41,8 +41,7 @@ class Game(pyglet.window.Window):
                       "UpOnAHouseTop" : pyglet.media.load(list_pj(["resources", "music", "Up on a Housetop.mp3"])),
                       "WeWishYou" : pyglet.media.load(list_pj(["resources", "music", "We Wish You.mp3"])),
                       "Grinch1" : pyglet.media.load(list_pj(["resources", "music", "grinch.mp3"])),
-                      # Grinch2 refuses to load, temporarily replace with grinch.mp3
-                      "Grinch2" : pyglet.media.load(list_pj(["resources", "music", "grinch.mp3)"]))
+                      # Grinch2 refuses to load, comment out for now
                       #"Grinch2" : pyglet.media.load(list_pj(["resources", "music", "02-Grinch.mp3)"]))
                       }
         messenger.Messenger.game = self
