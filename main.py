@@ -63,7 +63,7 @@ class Game(pyglet.window.Window):
         #TESTING PURPOSES
 
     def create_music_player(self):
-        "Creates a music player and loads all the fun christmas music on it."
+        """Creates a music player and loads all the fun christmas music on it."""
         self.music_player = pyglet.media.Player()
         #self.music_player.eos_action = "loop" #disabling looping
         music_list = []
