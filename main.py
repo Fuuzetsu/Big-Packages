@@ -10,19 +10,22 @@ import char
 import random
 import os.path
 
+# Joins a list of paths into a single path (OS independent)
+list_pj = lambda l: reduce(os.path.join, l) 
+
 try: #This will install avbin if needed, and it works on windows and linux!
-    pyglet.resource.image(r"resources/art/background1.png")
+    pyglet.resource.image(list_pj(["resources", "art", "background1.png"])
 except:
     if sys.platform.startswith("win"):
         print "Error: avbin.dll not found."
         quit()
     elif sys.platform.startswith("linux"):
         if sys.maxsize > 2 ** 32:
-            if os.system("avbin-linux-x86-64-7/install.sh") != 0:
+            if os.system(list_pj(["avbin-linux-x86-64-7", "install.sh"]) != 0:
                 print "You must install avbin manually by running the install.sh script in avbin-linux-x86-64-7."
                 quit()
         else:
-            if os.system("avbin-linux-x86-32-7/install.sh") != 0:
+            if os.system(list_pj(["avbin-linux-x86-32-7", "install.sh"]) != 0:
                 print "You must install avbin manually by running the install.sh script in avbin-linux-x86-64-7."
                 quit()
     elif sys.platform == "darwin":
@@ -33,16 +36,16 @@ except:
         #But hey, man? You gotta work. Work. Work this out. Get ahead.
         #You gotta work. Work. Work this out. Get ahead. Ah yeah!
         raise "Error: This game is not supported on OSX."
-        os.system("avbin-darwin-universal-5/install.sh")
+        os.system(list_pj(["avbin-darwin-universal-5", "install.sh"]))
 
 
-MUSIC = {"JingleBellsA" : pyglet.media.load(r"resources\music\Jingle Bells.mp3"),
-         "JingleBellsB" : pyglet.media.load(r"resources\music\Jingle Bells 3.mp3"),
-         "OhChristmasTree" : pyglet.media.load(r"resources\music\Oh Xmas.mp3"),
-         "UpOnAHouseTop" : pyglet.media.load(r"resources\music\Up on a Housetop.mp3"),
-         "WeWishYou" : pyglet.media.load(r"resources\music\We Wish You.mp3"),
-         "Grinch1" : pyglet.media.load(r"resources\music\grinch.mp3"),
-         "Grinch2" : pyglet.media.load(r"resources\music\02-Grinch.mp3")}
+MUSIC = {"JingleBellsA" : pyglet.media.load(list_pj(["resources", "music", "Jingle Bells.mp3")]),
+         "JingleBellsB" : pyglet.media.load(list_pj(["resources", "music", "Jingle Bells 3.mp3")]),
+         "OhChristmasTree" : pyglet.media.load(list_pj(["resources", "music", "Oh Xmas.mp3")]),
+         "UpOnAHouseTop" : pyglet.media.load(list_pj(["resources", "music", "Up on a Housetop.mp3")]),
+         "WeWishYou" : pyglet.media.load(list_pj(["resources", "music", "We Wish You.mp3")]),
+         "Grinch1" : pyglet.media.load(list_pj(["resources", "music", "grinch.mp3")]),
+         "Grinch2" : pyglet.media.load(list_pj(["resources", "music", "02-Grinch.mp3")])
       
 
 class Game(pyglet.window.Window):
@@ -77,7 +80,7 @@ class Game(pyglet.window.Window):
         for song in music_list:
             self.music_player.queue(song)
         self.music_player.play()
-        pyglet.clock.schedule_interval(self.music_player.play, 2.0)
+        pyglet.clock.schedule_interval(lambda _: self.music_player.play(), 2.0)
 
     def on_draw(self):
         self.clear()
