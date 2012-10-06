@@ -230,13 +230,19 @@ class Player(pyglet.sprite.Sprite, Collide, Interpolate):
         elif axis == "y": self.y += pos
 
     def move(self, dt, keys):
-        if pyglet.window.key.W in keys:
+        k = pyglet.window.key
+        up = [k.W, k.COMMA, k.UP]
+        down = [k.S, k.O, k.DOWN]
+        left = [k.A, k.LEFT]
+        right = [k.D, k.E, k.RIGHT]
+        anyIn = lambda l, m: reduce(lambda a, b: a or b, [x in m for x in l])
+        if anyIn(up, keys):
             self.axis_move(dt, "y", self.speed)
-        if pyglet.window.key.S in keys:
+        if anyIn(down, keys):
             self.axis_move(dt, "y", -1 * self.speed)
-        if pyglet.window.key.D in keys:
+        if anyIn(right, keys):
             self.axis_move(dt, "x", self.speed)
-        if pyglet.window.key.A in keys:
+        if anyIn(left, keys):
             self.axis_move(dt, "x", -1 * self.speed)
 
 class Present(pyglet.sprite.Sprite, Collide):
