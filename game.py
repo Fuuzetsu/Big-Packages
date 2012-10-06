@@ -3,28 +3,39 @@ import config
 import messenger
 import random
 import screen
+from utility import list_pj, load_join_m, load_join_i
 from pyglet.gl import * #Neccesary to prevent linear scaling
 
-SPRITE_SHEET_MERGED = pyglet.image.load(r"resources/art/sprite_sheet.png") #Non-divided sprite_sheet
-SPRITE_SHEET_DIVIDED = pyglet.image.ImageGrid(SPRITE_SHEET_MERGED, 8, 8) #Divided sprite_sheet
+#Non-divided sprite_sheet
+SPRITE_SHEET_MERGED = load_join_i(["resources", "art", "sprite_sheet.png"])
+
+#Divided sprite_sheet
+SPRITE_SHEET_DIVIDED = pyglet.image.ImageGrid(SPRITE_SHEET_MERGED, 8, 8) 
+
 IMAGES = {} #A hash of all the images in the game with the appropriate names
+
 PLAYER_IMAGES = [SPRITE_SHEET_DIVIDED[63],
                  SPRITE_SHEET_DIVIDED[62]]
+
 PRESENT_IMAGES = [SPRITE_SHEET_DIVIDED[56],
                   SPRITE_SHEET_DIVIDED[57],
                   SPRITE_SHEET_DIVIDED[58]]
 
-SOUNDS = {}
-SOUNDS["beep"] = pyglet.media.load(r"resources/music/bell-ring-01.mp3", streaming = False)
-SOUNDS["end"] = pyglet.media.load(r"resources/music/bell-ringing-01.mp3", streaming = False)
-SOUNDS["crumple"] = pyglet.media.load(r"resources/music/paper-rustle-8.mp3", streaming = False)
-BACKGROUND_IMAGES = [pyglet.image.load(r"resources/art/background1.png"),
-                     pyglet.image.load(r"resources/art/background2.png"),
-                     pyglet.image.load(r"resources/art/background3.png"),
-                     pyglet.image.load(r"resources/art/background4.png")]
+SOUNDS = dict(zip(["beep", "end", "crumple"],
+                  map(lambda x: pyglet.media.load(list_pj(x), streaming=False), 
+                      [["resources", "music", "bell-ring-01.mp3"],
+                       ["resources", "music", "bell-ringing-01.mp3"],
+                       ["resources", "music", "paper-rustle-8.mp3"]])))
+
+BACKGROUND_IMAGES = map(load_join_i,
+                        [["resources", "art", "background1.png"],
+                         ["resources", "art", "background2.png"],
+                         ["resources", "art", "background3.png"],
+                         ["resources", "art", "background4.png"]])
+                        
 
 class GameScreen(screen.AbstractScreen):
-    "Screen describing the actual game part of the game."
+    """Screen describing the actual game part of the game."""
     def __init__(self):
         messenger.Messenger.gameScreen = self
         self.background = random.choice(BACKGROUND_IMAGES)
@@ -43,8 +54,9 @@ class GameScreen(screen.AbstractScreen):
         self.create_labels()
         self.spawn_presents()
         self.lambdas = [] #keeps a list of functions to schedule and unschedule
+
     def start_updates(self):
-        "Begins scheduling 'GameScreen' updates and saving them for unscheduling."
+        """Begins scheduling 'GameScreen' updates and saving them for unscheduling."""
         lambdas = [(lambda dt : self.collect_present(), 0.05),
                    (lambda dt : self.player.move(dt, self.keys), 0.05),
                    (lambda dt : self.back_to_screen(), 0.01),
@@ -53,9 +65,11 @@ class GameScreen(screen.AbstractScreen):
         for _lambda in lambdas:
             self.lambdas.append(_lambda)
             pyglet.clock.schedule_interval(_lambda[0], _lambda[1])        
+
     def end_updates(self):
-        "Unschedules all 'GameScreen' updates."
+        """Unschedules all 'GameScreen' updates."""
         for _lambda in self.lambdas: pyglet.clock.unschedule(_lambda[0])
+
     def update_time(self):
         self.time -= 1
         if self.time < 0:
@@ -68,9 +82,11 @@ class GameScreen(screen.AbstractScreen):
             self.labels["timer"].color = (0, 0, 0, 255)
             pyglet.clock.schedule_once(lambda dt: SOUNDS["beep"].play(), 0.01)
             pyglet.clock.schedule_once(lambda dt: SOUNDS["beep"].play(), 0.5)
+
     def self_update_labels(self):
         self.labels["timer"].text = "%.2f" % self.time
         self.labels["score"].text = "Score: %d" % self.score
+
     def create_labels(self):
         font_size = 60
         self.labels["score"] = pyglet.text.Label(text = "Score: %d" % self.score,
@@ -90,12 +106,15 @@ class GameScreen(screen.AbstractScreen):
             self.player.y = config.SCREEN_HEIGHT - self.player.height
         if self.player.y < 0:
             self.player.y = 0
+
     def on_key_press(self, symbol, modifiers):
-        "Adds keys to set of currently held down keys."
+        """Adds keys to set of currently held down keys."""
         self.keys.add(symbol)
+
     def on_key_release(self, symbol, modifiers):
-        "Removes keys from set of currently held down keys."
+        """Removes keys from set of currently held down keys."""
         if symbol in self.keys: self.keys.remove(symbol)
+
     def on_draw(self):
         self.background.blit(0,0)
         self.present_batch.draw()
@@ -103,6 +122,7 @@ class GameScreen(screen.AbstractScreen):
             item = self.labels[key]
             item.draw()
         self.player.draw()
+
     def collect_present(self):
         for present in self.presents[:]:
             if self.player.collide(present):
@@ -114,42 +134,49 @@ class GameScreen(screen.AbstractScreen):
             self.present_amount_increase()
             self.present_worth_increase()
             self.spawn_presents()
+
     def spawn_presents(self):
-        "Spawns presents in batches"
+        """Spawns presents in batches"""
         self.time_amount -= config.TIME_INCREMENT
         self.time = self.time_amount
         self.labels["timer"].color = (255, 255, 255, 255)
         for i in range(self.present_amount):
             self.presents.append(Present(self.present_batch,
                                          self.present_size))
+
     def present_size_reduce(self):
-        "A setter for the size of a present sprite."
+        """A setter for the size of a present sprite."""
         if self.present_size - config.PRESENT_SIZE_INCREMENT < config.MIN_PRESENT_SIZE:
             self.present_size = config.MIN_PRESENT_SIZE
         else:
             self.present_size -= config.PRESENT_SIZE_INCREMENT
+
     def present_amount_increase(self):
-        "A setter for the amount of presents per present spawn."
+        """A setter for the amount of presents per present spawn."""
         self.present_amount += config.PRESENT_AMOUNT_INCREMENT
+
     def present_worth_increase(self):
-        "A setter for pointer per present."
+        """A setter for pointer per present."""
         self.present_worth += config.PRESENT_WORTH_INCREMENT
+
     def player_speed_boost(self):
         if self.player.speed + config.PLAYER_SPEED_INCREMENT > config.MAX_PLAYER_SPEED:
             self.player.speed = config.MAX_PLAYER_SPEED
         else:
             self.player.speed += config.PLAYER_SPEED_INCREMENT
+
     def lose_life(self):
-        "Handles running out of lives properly, a life setter."
+        """Handles running out of lives properly, a life setter."""
         lives -= 1
         if lives < 0:
             messenger.change_state("credit_screen", score)
+
     def increment_score(self, points):
-        "Handles score increments correctly, a score setter."
+        """Handles score increments correctly, a score setter."""
         self.score += points
 
 class Collide(object):
-    "Class that adds collsion methods."
+    """Class that adds collsion methods."""
     def collide(self, other):
         "Checks if one objects collides with another."
         if other.x < self.x + (self.width / 2) < other.x + other.width:
@@ -161,16 +188,16 @@ class Collide(object):
         return False
     
 class Interpolate(object):
-    "Adds methods for tweening."
+    """Adds methods for tweening."""
     def interpolate(self, number, steps, form):
-        "Allows for various forms of interpolation."
+        """Allows for various forms of interpolation."""
         if form == "step":
             return [number / steps for i in range(steps)]
         elif form == "accelerate":
             return [number / step for steps in range(1, steps + 1)]
 
 class Player(pyglet.sprite.Sprite, Collide, Interpolate):
-    "A player object, can be controlled with input."
+    """A player object, can be controlled with input."""
     def __init__(self):
         super(Player, self).__init__(random.choice(PLAYER_IMAGES))
         self.x, self.y = config.PLAYER_START
@@ -178,10 +205,12 @@ class Player(pyglet.sprite.Sprite, Collide, Interpolate):
         self.time = 0.5
         self.scale = 2.0
         self.steps = config.PLAYER_STEPS
+
     def draw(self):
         super(Player, self).draw()
         glEnable(GL_TEXTURE_2D)
         gl.glTexParameteri(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_MAG_FILTER, gl.GL_NEAREST)
+
     def axis_move(self, dt, axis, amount):
         if axis == "x":
             distance = self.interpolate(amount + amount * dt, self.steps, "step")
@@ -195,9 +224,11 @@ class Player(pyglet.sprite.Sprite, Collide, Interpolate):
             both = zip(distance, time)
             for distance, time in both:
                 pyglet.clock.schedule_once(lambda dt : self._axis_move("y", distance), time)
+
     def _axis_move(self, axis, pos):
         if axis == "x": self.x += pos
         elif axis == "y": self.y += pos
+
     def move(self, dt, keys):
         if pyglet.window.key.W in keys:
             self.axis_move(dt, "y", self.speed)
@@ -209,13 +240,14 @@ class Player(pyglet.sprite.Sprite, Collide, Interpolate):
             self.axis_move(dt, "x", -1 * self.speed)
 
 class Present(pyglet.sprite.Sprite, Collide):
-    "A collectible present object."
+    """A collectible present object."""
     def __init__(self, batch, scale):
         super(Present, self).__init__(random.choice(PRESENT_IMAGES))
         self.scale = scale
         self.x = random.randint(0, config.SCREEN_WIDTH - self.width)
         self.y = random.randint(0, config.SCREEN_HEIGHT - self.height)
         self.batch = batch
+
     def draw(self):
         super(Player, self).draw()
         glEnable(GL_TEXTURE_2D)

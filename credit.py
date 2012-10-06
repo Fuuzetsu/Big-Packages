@@ -4,10 +4,11 @@ import button
 import messenger
 import config
 import text
+from utility import load_join_i
 
 IMAGES = {}
-IMAGES["background"] = pyglet.image.load(r"resources/art/background1.png")
-IMAGES["menu_button"] = pyglet.image.load(r"resources/art/menu_button.png")
+IMAGES["background"] = load_join_i(["resources", "art", "background1.png"])
+IMAGES["menu_button"] = load_join_i(["resources", "art", "menu_button.png"])
 
 class CreditScreen(screen.AbstractScreen):
     def __init__(self):
@@ -17,11 +18,13 @@ class CreditScreen(screen.AbstractScreen):
         self.background = IMAGES["background"]
         self.make_buttons()
         self.make_labels()
+
     def on_draw(self):
         self.background.blit(0, 0)
         self.menu_button.draw()
         self.score_label.draw()
         self.score_comment.draw()
+
     def make_score_comment(self):
         score = messenger.Messenger.gameScreen.score
         if score == 0:
@@ -71,8 +74,10 @@ Config. File. You. Asshat."""
                                           color = self.color,
                                           x = 25,
                                           y = config.SCREEN_HEIGHT - 50)
+
     def on_mouse_press(self, x, y, button, modifiers):
         self.menu_button.click(x, y)
+
     def make_labels(self):
         self.score_label = pyglet.text.Label(text = "Final Score: %d" % 0,
                                              font_name = config.FONT_TYPE,
@@ -87,6 +92,7 @@ Config. File. You. Asshat."""
                                           color = self.color,
                                           x = config.SCREEN_WIDTH / 4,
                                           y = config.SCREEN_HEIGHT / 4 * 2)
+
     def make_buttons(self):
         self.menu_button = button.Button(image = IMAGES["menu_button"],
                                           x = config.SCREEN_WIDTH / 4,
